@@ -8,7 +8,3 @@ typedef struct{
 }noeud;
 
 uint8_t table[150][100];
-
-int compareNoeud(noeud n1, noeud n2);
-
-void algoAstar(uint8_t table[][],uint8_t objectif[][],uint8_t depart[][]);
