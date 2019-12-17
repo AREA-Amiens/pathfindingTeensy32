@@ -12,12 +12,8 @@ void loop() {
   // put your main code here, to run repeatedly:
 }
 
-int compareNoeud(noeud n1,noeud n2){
-  if (n1.h<n2.h) return 1;
-  else if(n1.h==n2.h) return 0;
-  else return -1;
-}
 void algoAstar(uint8_t table[150][100], noeud objectif, noeud depart){
+nbrnoeud++;
 pente = (objectif.y-depart.y)/(objectif.x-depart.x);
 if(pente>100&&objectif.y<depart.y)dir=0; //cas ou l'objectif est au dessus du robot dans l'axe des y (pente infini)
 if(pente>100&&objectif.y>depart.y)dir=1; //cas ou l'objectif est au dessous du robot dans l'axe des y (pente infini)
@@ -53,6 +49,8 @@ for(int i=0;i<3;i++){
     }
   }
 }
+listeRetenue[nbrnoeud]=listeAttente[1];
+table[listeRetenue[nbrnoeud].x][listeRetenue[nbrnoeud].y]='x';
 }
 
 void triliste(noeud liste[3]){
@@ -63,12 +61,6 @@ void triliste(noeud liste[3]){
         liste[i]=liste[i+1];
         liste[i+1]=temp;
       }
-  }
-}
-
-void supplist(noeud liste[3],int pos){
-  for(int i = pos-1;i<2;i++){
-    liste[i]=liste[i+1];
   }
 }
 

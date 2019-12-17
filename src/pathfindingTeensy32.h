@@ -7,7 +7,6 @@ typedef struct{
 }noeud;
 
 void triliste(noeud liste[3]);
-void supplist(noeud liste[3],int pos);
 void choixdir(uint8_t dir,noeud objectif);
 
 uint8_t table[150][100];
@@ -26,6 +25,7 @@ float pente;
 
 uint8_t dir;
 uint8_t noeudfaux=0;
+uint8_t nbrnoeud=0;
 
 uint8_t xcourant;
 uint8_t ycourant;
