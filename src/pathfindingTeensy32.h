@@ -6,6 +6,10 @@ typedef struct{
   float h; // heuristique
 }noeud;
 
+void triliste(noeud liste[3]);
+void supplist(noeud liste[3],int pos);
+void choixdir(uint8_t dir,noeud objectif);
+
 uint8_t table[150][100];
 
 noeud listeRetenue[100]; //liste retenue de noeud
@@ -13,10 +17,15 @@ noeud listeAttente[3];
 noeud n1;
 noeud n2;
 noeud n3;
-
+noeud depart;
+noeud arrive;
+noeud noeudcourant;
+noeud noeudparent;
 
 float pente;
+
 uint8_t dir;
+uint8_t noeudfaux=0;
 
 uint8_t xcourant;
 uint8_t ycourant;
