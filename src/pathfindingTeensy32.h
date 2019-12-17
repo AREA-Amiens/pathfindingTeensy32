@@ -8,6 +8,7 @@ typedef struct{
 
 void triliste(noeud liste[3]);
 void choixdir(uint8_t dir,noeud objectif);
+void algoAstar(uint8_t table[150][100],noeud objectif,noeud depart);
 
 uint8_t table[150][100];
 
@@ -17,7 +18,7 @@ noeud n1;
 noeud n2;
 noeud n3;
 noeud depart;
-noeud arrive;
+noeud objectif;
 noeud noeudcourant;
 noeud noeudparent;
 

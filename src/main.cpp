@@ -9,7 +9,7 @@ void setup() {
 }
 
 void loop() {
-  // put your main code here, to run repeatedly:
+algoAstar(table,objectif,depart);
 }
 
 void algoAstar(uint8_t table[150][100], noeud objectif, noeud depart){
@@ -51,6 +51,9 @@ for(int i=0;i<3;i++){
 }
 listeRetenue[nbrnoeud]=listeAttente[1];
 table[listeRetenue[nbrnoeud].x][listeRetenue[nbrnoeud].y]='x';
+if((listeRetenue[nbrnoeud].x!=objectif.x)&&(listeRetenue[nbrnoeud].y!=objectif.y))
+algoAstar(table,objectif,listeRetenue[nbrnoeud]);
+
 }
 
 void triliste(noeud liste[3]){
