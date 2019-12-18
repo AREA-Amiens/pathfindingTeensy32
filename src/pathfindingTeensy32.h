@@ -19,19 +19,17 @@ noeud listeAttente[3];
 noeud n1;
 noeud n2;
 noeud n3;
-noeud depart;
-noeud objectif;
+
 noeud noeudcourant;
+noeud posrobot;
+noeud objectif;
 noeud noeudparent;
 
-int pente;
-
+float pente;
+float b;
 uint8_t dir;
 uint8_t noeudfaux=0;
 uint8_t nbrnoeud=0;
 
 uint8_t xcourant;
 uint8_t ycourant;
-
-uint8_t xparent;
-uint8_t yparent;
