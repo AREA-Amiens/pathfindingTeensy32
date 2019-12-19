@@ -29,12 +29,10 @@ void affichetab(){
   //Serial.print("b");
   for(int i=0;i<100;i++){
     for(int j=0;j<150;j++){
-
         Serial.print(table[j][i]);
-}
-
+      }
+      Serial.println();
     }
-    Serial.println();
 }
 
 void initTable(){
