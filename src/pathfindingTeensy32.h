@@ -11,7 +11,7 @@ void choixdir(uint8_t dir,noeud objectif,noeud depart);
 void algoAstar(uint8_t table[150][100],noeud objectif,noeud depart);
 void initTable();
 void affichetab();
-
+void posEnemi(int posx,int posy);
 uint8_t table[150][100];
 
 noeud listeRetenue[100]; //liste retenue de noeud
