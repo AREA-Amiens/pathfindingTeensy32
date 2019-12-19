@@ -4,15 +4,17 @@ void setup() {
 
   Serial.begin(9600);
   delay(100);
-  //Serial.println("com ok");
+  Serial.println("com ok");
   int xpos=10;//position courante du robot
-  int ypos=32;
+  int ypos=10;
   posrobot.x=xpos;
   posrobot.y=ypos;
-  objectif.x=xpos+62;
-  objectif.y=ypos+12;
-  posEnemi(xpos+32,ypos+6);
+  objectif.x=xpos+102;
+  objectif.y=ypos+84;
   initTable();
+  posEnemi(xpos+32,ypos+15);
+  posEnemi(xpos+50,ypos+40);
+
   table[posrobot.x][posrobot.y]=2;
   table[objectif.x][objectif.y]=3;
   t1=millis();
@@ -57,6 +59,7 @@ void initTable(){
 }
 
 void algoAstar(uint8_t table[150][100], noeud objectif, noeud depart){
+  int j;
   noeudfaux=0;
   pente = ((float)(objectif.y-depart.y) /(float) (objectif.x-depart.x))*10.0;
   /*Serial.println(pente);
@@ -81,7 +84,16 @@ void algoAstar(uint8_t table[150][100], noeud objectif, noeud depart){
     if((table[listeAttente[i].x][listeAttente[i].y]==1)||(table[listeAttente[i].x][listeAttente[i].y]==6)){
       //Serial.println("boum");
       noeudfaux++;
+      //if(noeudfaux==2)noeudfaux=3;
+      //listeAttente[i].h=150;
+      //triliste(listeAttente);
     }
+  }
+  /*if(noeudfaux==2){
+
+    noeudfaux=3;
+  }
+}*/
     switch(noeudfaux){
       case 0:
       listeRetenue[nbrnoeud]=listeAttente[2];
@@ -90,7 +102,14 @@ void algoAstar(uint8_t table[150][100], noeud objectif, noeud depart){
       listeRetenue[nbrnoeud]=listeAttente[1];
       break;
       case 2:
-      listeRetenue[nbrnoeud]=listeAttente[0];
+
+      for(int i=0;i<3;i++){
+      if((table[listeAttente[i].x][listeAttente[i].y]!=1)&&(table[listeAttente[i].x][listeAttente[i].y]!=6))
+      {
+        j=i;
+      }
+      }
+      listeRetenue[nbrnoeud]=listeAttente[j];
       break;
       case 3:
       switch(dir){
@@ -103,19 +122,19 @@ void algoAstar(uint8_t table[150][100], noeud objectif, noeud depart){
         choixdir(dir,objectif,depart);
         break;
         case 2:
-        dir=4;
-        choixdir(dir,objectif,depart);
-        break;
-        case 3:
-        dir=5;
-        choixdir(dir,objectif,depart);
-        break;
-        case 4:
         dir=0;
         choixdir(dir,objectif,depart);
         break;
+        case 3:
+        dir=4;
+        choixdir(dir,objectif,depart);
+        break;
+        case 4:
+        dir=1;
+        choixdir(dir,objectif,depart);
+        break;
         case 5:
-        dir=2;
+        dir=0;
         choixdir(dir,objectif,depart);
         break;
         case 6:
@@ -129,7 +148,7 @@ void algoAstar(uint8_t table[150][100], noeud objectif, noeud depart){
       }
       break;
     }
-  }
+
 
   table[listeRetenue[nbrnoeud].x][listeRetenue[nbrnoeud].y]=4;
 
@@ -159,6 +178,7 @@ void triliste(noeud liste[3]){
 
 void choixdir(uint8_t dir,noeud objectif, noeud depart2){
   //Serial.println(dir);
+  //Serial.println();
   pente = ((float)(objectif.y-posrobot.y) /(float) (objectif.x-posrobot.x));
   b=objectif.y-pente*objectif.x;
   switch (dir) {
@@ -198,16 +218,15 @@ void choixdir(uint8_t dir,noeud objectif, noeud depart2){
     break;
 
     case 2:
-    xcourant= depart2.x;
-    ycourant= depart2.y;
-    n1.x=xcourant;
-    n1.y=ycourant-1;
+
+    n1.x=depart2.x;
+    n1.y=depart2.y-1;
     n1.h=(abs(n1.y-pente*n1.x-b)/sqrt(1-pente*pente));
-    n2.x=xcourant+1;
-    n2.y=ycourant-1;
+    n2.x=depart2.x+1;
+    n2.y=depart2.y-1;
     n2.h=(abs(n2.y-pente*n2.x-b)/sqrt(1-pente*pente));
-    n3.x=xcourant+1;
-    n3.y=ycourant;
+    n3.x=depart2.x+1;
+    n3.y=depart2.y;
     n3.h=(abs(n3.y-pente*n3.x-b)/sqrt(1-pente*pente));
     listeAttente[0]=n1;
     listeAttente[1]=n2;
@@ -248,16 +267,15 @@ void choixdir(uint8_t dir,noeud objectif, noeud depart2){
     triliste(listeAttente);
     break;
     case 5:
-    xcourant= depart2.x;
-    ycourant= depart2.y;
-    n1.x=xcourant-1;
-    n1.y=ycourant;
+
+    n1.x=depart2.x-1;
+    n1.y=depart2.y;
     n1.h=(abs(n1.y-pente*n1.x-b)/sqrt(1-pente*pente));
-    n2.x=xcourant-1;
-    n2.y=ycourant-1;
+    n2.x=depart2.x-1;
+    n2.y=depart2.y-1;
     n2.h=(abs(n2.y-pente*n2.x-b)/sqrt(1-pente*pente));
-    n3.x=xcourant;
-    n3.y=ycourant-1;
+    n3.x=depart2.x;
+    n3.y=depart2.y-1;
     n3.h=(abs(n3.y-pente*n3.x-b)/sqrt(1-pente*pente));
     listeAttente[0]=n1;
     listeAttente[1]=n2;
@@ -302,16 +320,44 @@ void choixdir(uint8_t dir,noeud objectif, noeud depart2){
 }
 
 void posEnemi(int posx,int posy){
-  for(int i = posx-5;i<posx+5;i++){
-    table[i][posy-5]=6;
+/*int x,y;
+  for(int i=0;i<361;i++){
+    x=posx+9*cos(i);
+    y=posy+9*sin(i);
+    table[x][y]=6;
   }
-  for(int i = posx-5;i<posx+5;i++){
-    table[i][posy+5]=6;
+ for(int i=0;i<361;i++){
+    x=posx+8*cos(i);
+    y=posy+8*sin(i);
+    table[x][y]=6;
+  }*/
+
+
+ for(int i = posx-10;i<posx+11;i++){
+    table[i][posy-10]=6;
   }
-  for(int i = posy-5;i<posy+5;i++){
-    table[posx-5][i]=6;
+  for(int i = posx-10;i<posx+11;i++){
+    table[i][posy+10]=6;
   }
-  for(int i = posy-5;i<posy+5;i++){
-    table[posx+5][i]=6;
+  for(int i = posy-10;i<posy+10;i++){
+    table[posx-10][i]=6;
   }
+  for(int i = posy-10;i<posy+10;i++){
+    table[posx+10][i]=6;
+  }
+
+//deuxieme couche
+
+  /*for(int i = posx-9;i<posx+10;i++){
+    table[i][posy-8]=6;
+  }
+  for(int i = posx-9;i<posx+10;i++){
+    table[i][posy+8]=6;
+  }
+  for(int i = posy-9;i<posy+9;i++){
+    table[posx-8][i]=6;
+  }
+  for(int i = posy-9;i<posy+9;i++){
+    table[posx+8][i]=6;
+  }*/
 }
