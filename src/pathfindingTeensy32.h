@@ -33,3 +33,6 @@ uint8_t nbrnoeud=0;
 
 uint8_t xcourant;
 uint8_t ycourant;
+
+float t1;
+float ttot;
