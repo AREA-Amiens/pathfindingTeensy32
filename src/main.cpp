@@ -1,5 +1,7 @@
 #include <pathfindingTeensy32.h>
 
+
+
 void setup() {
 
   Serial.begin(9600);
@@ -18,11 +20,20 @@ void setup() {
   table[posrobot.x][posrobot.y]=2;
   table[objectif.x][objectif.y]=3;
   t1=millis();
-  algoAstar(table,objectif,posrobot);
+  algoPAstar(table,objectif,posrobot);
+
   ttot=millis()-t1;
   Serial.println(ttot);
-//delay(1500);
+  //delay(1500);
   affichetab();
+  cheminRobot();
+  /*for(int i=0;i<150;i++){
+    Serial.println(listeRetenue[i].x,DEC);
+    Serial.println(listeRetenue[i].y);
+
+  }*/
+  //Serial.println(nbrnoeud);
+
 }
 
 void loop() {
@@ -33,10 +44,10 @@ void affichetab(){
   //Serial.print("b");
   for(int i=0;i<100;i++){
     for(int j=0;j<150;j++){
-        Serial.print(table[j][i]);
-      }
-      Serial.println();
+      Serial.print(table[j][i]);
     }
+    Serial.println();
+  }
 }
 
 void initTable(){
@@ -58,9 +69,12 @@ void initTable(){
   }
 }
 
-void algoAstar(uint8_t table[150][100], noeud objectif, noeud depart){
+void algoPAstar(uint8_t table[150][100], noeud objectif, noeud depart){
+  nbrnoeud++;
+
   int j;
   noeudfaux=0;
+
   pente = ((float)(objectif.y-depart.y) /(float) (objectif.x-depart.x))*10.0;
   /*Serial.println(pente);
   Serial.println();
@@ -83,74 +97,71 @@ void algoAstar(uint8_t table[150][100], noeud objectif, noeud depart){
   for(int i=0;i<3;i++){
     if((table[listeAttente[i].x][listeAttente[i].y]==1)||(table[listeAttente[i].x][listeAttente[i].y]==6)){
       //Serial.println("boum");
+      //Serial.println(listeAttente[i].x);
+
       noeudfaux++;
-      //if(noeudfaux==2)noeudfaux=3;
-      //listeAttente[i].h=150;
-      //triliste(listeAttente);
     }
   }
-  /*if(noeudfaux==2){
+  switch(noeudfaux){
+    case 0:
+    listeRetenue[nbrnoeud]=listeAttente[2];
+    break;
+    case 1:
+    listeRetenue[nbrnoeud]=listeAttente[1];
+    break;
+    case 2:
 
-    noeudfaux=3;
-  }
-}*/
-    switch(noeudfaux){
-      case 0:
-      listeRetenue[nbrnoeud]=listeAttente[2];
-      break;
-      case 1:
-      listeRetenue[nbrnoeud]=listeAttente[1];
-      break;
-      case 2:
-
-      for(int i=0;i<3;i++){
+    for(int i=0;i<3;i++){
       if((table[listeAttente[i].x][listeAttente[i].y]!=1)&&(table[listeAttente[i].x][listeAttente[i].y]!=6))
       {
         j=i;
       }
-      }
-      listeRetenue[nbrnoeud]=listeAttente[j];
+    }
+    listeRetenue[nbrnoeud]=listeAttente[j];
+    break;
+    case 3:
+    switch(dir){
+      case 0:
+      dir=2;
+      choixdir(dir,objectif,depart);
+      break;
+      case 1:
+      dir=3;
+      choixdir(dir,objectif,depart);
+      break;
+      case 2:
+      dir=0;
+      choixdir(dir,objectif,depart);
       break;
       case 3:
-      switch(dir){
-        case 0:
-        dir=2;
-        choixdir(dir,objectif,depart);
-        break;
-        case 1:
-        dir=3;
-        choixdir(dir,objectif,depart);
-        break;
-        case 2:
-        dir=0;
-        choixdir(dir,objectif,depart);
-        break;
-        case 3:
-        dir=4;
-        choixdir(dir,objectif,depart);
-        break;
-        case 4:
-        dir=1;
-        choixdir(dir,objectif,depart);
-        break;
-        case 5:
-        dir=0;
-        choixdir(dir,objectif,depart);
-        break;
-        case 6:
-        dir=0;
-        choixdir(dir,objectif,depart);
-        break;
-        case 7:
-        dir=0;
-        choixdir(dir,objectif,depart);
-        break;
-      }
+      dir=4;
+      choixdir(dir,objectif,depart);
+      break;
+      case 4:
+      dir=1;
+      choixdir(dir,objectif,depart);
+      break;
+      case 5:
+      dir=0;
+      choixdir(dir,objectif,depart);
+      break;
+      case 6:
+      dir=0;
+      choixdir(dir,objectif,depart);
+      break;
+      case 7:
+      dir=0;
+      choixdir(dir,objectif,depart);
       break;
     }
+    break;
+  }
 
 
   table[listeRetenue[nbrnoeud].x][listeRetenue[nbrnoeud].y]=4;
+
+
+
 
   if((listeRetenue[nbrnoeud].x!=objectif.x)||(listeRetenue[nbrnoeud].y!=objectif.y)){
     /*Serial.println(listeRetenue[nbrnoeud].x);
@@ -158,21 +169,26 @@ void algoAstar(uint8_t table[150][100], noeud objectif, noeud depart){
     Serial.println(objectif.x);
     Serial.println(objectif.y);
     */
-    algoAstar(table,objectif,listeRetenue[nbrnoeud]);
-  }
+    algoPAstar(table,objectif,listeRetenue[nbrnoeud]);
+    //Serial.println(nbrnoeud);
 
-  nbrnoeud++;
+
+  }
+//Serial.println(nbrnoeud);
+
+
+
 
 }
 
 void triliste(noeud liste[3]){
   noeud temp;
   for(int i=0;i<3;i++){
-      if(liste[i+1].h>liste[i].h){
-        temp=liste[i];
-        liste[i]=liste[i+1];
-        liste[i+1]=temp;
-      }
+    if(liste[i+1].h>liste[i].h){
+      temp=liste[i];
+      liste[i]=liste[i+1];
+      liste[i+1]=temp;
+    }
   }
 }
 
@@ -320,44 +336,83 @@ void choixdir(uint8_t dir,noeud objectif, noeud depart2){
 }
 
 void posEnemi(int posx,int posy){
-/*int x,y;
+  /*int x,y;
   for(int i=0;i<361;i++){
-    x=posx+9*cos(i);
-    y=posy+9*sin(i);
-    table[x][y]=6;
-  }
- for(int i=0;i<361;i++){
-    x=posx+8*cos(i);
-    y=posy+8*sin(i);
-    table[x][y]=6;
-  }*/
+  x=posx+9*cos(i);
+  y=posy+9*sin(i);
+  table[x][y]=6;
+}
+for(int i=0;i<361;i++){
+x=posx+8*cos(i);
+y=posy+8*sin(i);
+table[x][y]=6;
+}*/
 
 
- for(int i = posx-10;i<posx+11;i++){
-    table[i][posy-10]=6;
-  }
-  for(int i = posx-10;i<posx+11;i++){
-    table[i][posy+10]=6;
-  }
-  for(int i = posy-10;i<posy+10;i++){
-    table[posx-10][i]=6;
-  }
-  for(int i = posy-10;i<posy+10;i++){
-    table[posx+10][i]=6;
-  }
+for(int i = posx-10;i<posx+11;i++){
+  table[i][posy-10]=6;
+}
+for(int i = posx-10;i<posx+11;i++){
+  table[i][posy+10]=6;
+}
+for(int i = posy-10;i<posy+10;i++){
+  table[posx-10][i]=6;
+}
+for(int i = posy-10;i<posy+10;i++){
+  table[posx+10][i]=6;
+}
 
 //deuxieme couche
 
-  /*for(int i = posx-9;i<posx+10;i++){
-    table[i][posy-8]=6;
-  }
-  for(int i = posx-9;i<posx+10;i++){
-    table[i][posy+8]=6;
-  }
-  for(int i = posy-9;i<posy+9;i++){
-    table[posx-8][i]=6;
-  }
-  for(int i = posy-9;i<posy+9;i++){
-    table[posx+8][i]=6;
-  }*/
+/*for(int i = posx-9;i<posx+10;i++){
+table[i][posy-8]=6;
 }
+for(int i = posx-9;i<posx+10;i++){
+table[i][posy+8]=6;
+}
+for(int i = posy-9;i<posy+9;i++){
+table[posx-8][i]=6;
+}
+for(int i = posy-9;i<posy+9;i++){
+table[posx+8][i]=6;
+}*/
+}
+
+void cheminRobot(){
+  //uint8_t tailleListe=sizeof(listeRetenue.x)/sizeof(listeRetenue[0].x);
+  Serial.println("chemin");
+
+  for(int i=3;i<250;i++){
+    if(listeRetenue[i].x==0)i=250;
+    pente1=((float)(&listeRetenue[i].y-&listeRetenue[i-1].y)/(float)(&listeRetenue[i].x-&listeRetenue[i-1].x));
+    pente2=((float)(&listeRetenue[i-2].y-&listeRetenue[i-3].y)/(float) (&listeRetenue[i-2].x-&listeRetenue[i-3].x));
+    pente3=((float)(&listeRetenue[i+1].y-&listeRetenue[i].y)/(float) (&listeRetenue[i+1].x-&listeRetenue[i].x));
+    if(((listeRetenue[i+1].x-listeRetenue[i].x)==0))
+    {
+     if(((listeRetenue[i].x-listeRetenue[i-1].x)!=0)){
+      Serial.println(listeRetenue[i].x);
+      Serial.println(listeRetenue[i].y);
+      Serial.println("coucou");
+      }
+    }
+    if(((listeRetenue[i-1].x-listeRetenue[i-2].x)==0))
+    {
+      if(((listeRetenue[i+1].y-listeRetenue[i].y)==0))
+      {
+        Serial.println(listeRetenue[i].x);
+        Serial.println(listeRetenue[i].y);
+        Serial.println("coucou");
+      }
+
+    }
+    if(((listeRetenue[i-1].y-listeRetenue[i-2].y)==0))
+    { if(pente3!=pente1)
+      {
+        Serial.println(listeRetenue[i].x);
+        Serial.println(listeRetenue[i].y);
+        Serial.println("coucou");
+      }
+    }
+
+    }
+  }
