@@ -3,7 +3,8 @@
 
 
 void setup() {
-
+  pinMode(13,OUTPUT);
+  digitalWrite(13,HIGH);
   Serial.begin(9600);
   delay(100);
   Serial.println("com ok");
@@ -11,11 +12,11 @@ void setup() {
   int ypos=10;
   posrobot.x=xpos;
   posrobot.y=ypos;
-  objectif.x=xpos+102;
-  objectif.y=ypos+84;
+  objectif.x=xpos+92;
+  objectif.y=ypos+24;
   initTable();
-  posEnemi(xpos+32,ypos+15);
-  posEnemi(xpos+50,ypos+40);
+  posEnemi(xpos+22,ypos+15);
+  //posEnemi(xpos+50,ypos+15);
 
   table[posrobot.x][posrobot.y]=2;
   table[objectif.x][objectif.y]=3;
@@ -336,19 +337,6 @@ void choixdir(uint8_t dir,noeud objectif, noeud depart2){
 }
 
 void posEnemi(int posx,int posy){
-  /*int x,y;
-  for(int i=0;i<361;i++){
-  x=posx+9*cos(i);
-  y=posy+9*sin(i);
-  table[x][y]=6;
-}
-for(int i=0;i<361;i++){
-x=posx+8*cos(i);
-y=posy+8*sin(i);
-table[x][y]=6;
-}*/
-
-
 for(int i = posx-10;i<posx+11;i++){
   table[i][posy-10]=6;
 }
@@ -379,7 +367,6 @@ table[posx+8][i]=6;
 }
 
 void cheminRobot(){
-  //uint8_t tailleListe=sizeof(listeRetenue.x)/sizeof(listeRetenue[0].x);
   Serial.println("chemin");
 
   for(int i=3;i<250;i++){
@@ -403,16 +390,17 @@ void cheminRobot(){
         Serial.println(listeRetenue[i].y);
         Serial.println("coucou");
       }
-
     }
-    if(((listeRetenue[i-1].y-listeRetenue[i-2].y)==0))
-    { if(pente3!=pente1)
+    if(((listeRetenue[i].y-listeRetenue[i-1].y)==0)&&((listeRetenue[i-1].y-listeRetenue[i-2].y)==0))
+    { if(((listeRetenue[i+1].y-listeRetenue[i].y)!=0)&&(listeRetenue[i].x!=0))
       {
         Serial.println(listeRetenue[i].x);
         Serial.println(listeRetenue[i].y);
         Serial.println("coucou");
-      }
+        }
     }
-
     }
+    Serial.println(listeRetenue[nbrnoeud].x);
+    Serial.println(listeRetenue[nbrnoeud].y);
+    Serial.println("coucou");
   }
