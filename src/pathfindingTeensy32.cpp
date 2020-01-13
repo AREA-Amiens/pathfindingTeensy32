@@ -371,36 +371,49 @@ void cheminRobot(){
 
   for(int i=3;i<250;i++){
     if(listeRetenue[i].x==0)i=250;
-    pente1=((float)(&listeRetenue[i].y-&listeRetenue[i-1].y)/(float)(&listeRetenue[i].x-&listeRetenue[i-1].x));
-    pente2=((float)(&listeRetenue[i-2].y-&listeRetenue[i-3].y)/(float) (&listeRetenue[i-2].x-&listeRetenue[i-3].x));
-    pente3=((float)(&listeRetenue[i+1].y-&listeRetenue[i].y)/(float) (&listeRetenue[i+1].x-&listeRetenue[i].x));
-    if(((listeRetenue[i+1].x-listeRetenue[i].x)==0))
+    // pente1=((float)(&listeRetenue[i].y-&listeRetenue[i-1].y)/(float)(&listeRetenue[i].x-&listeRetenue[i-1].x));
+    // pente2=((float)(&listeRetenue[i-2].y-&listeRetenue[i-3].y)/(float) (&listeRetenue[i-2].x-&listeRetenue[i-3].x));
+    // pente3=((float)(&listeRetenue[i+1].y-&listeRetenue[i].y)/(float) (&listeRetenue[i+1].x-&listeRetenue[i].x));
+    if(((listeRetenue[i+1].x-listeRetenue[i].x)==0))//cas d'un changement à 90°
     {
-     if(((listeRetenue[i].x-listeRetenue[i-1].x)!=0)){
-      Serial.println(listeRetenue[i].x);
-      Serial.println(listeRetenue[i].y);
-      Serial.println("coucou");
+      if(((listeRetenue[i].x-listeRetenue[i-1].x)!=0))
+      {
+        Serial.println(listeRetenue[i].x);
+        Serial.println(listeRetenue[i].y);
+        Serial.println("coucou");
+        Serial.println("cas0");
       }
     }
-    if(((listeRetenue[i-1].x-listeRetenue[i-2].x)==0))
+    if(((listeRetenue[i-1].x-listeRetenue[i-2].x)==0))// passage de 90° vers pente non nulle ou non infini
     {
       if(((listeRetenue[i+1].y-listeRetenue[i].y)==0))
       {
         Serial.println(listeRetenue[i].x);
         Serial.println(listeRetenue[i].y);
         Serial.println("coucou");
+        Serial.println("cas1");
       }
     }
-    if(((listeRetenue[i].y-listeRetenue[i-1].y)==0)&&((listeRetenue[i-1].y-listeRetenue[i-2].y)==0))
-    { if(((listeRetenue[i+1].y-listeRetenue[i].y)!=0)&&(listeRetenue[i].x!=0))
+    if(((listeRetenue[i].y-listeRetenue[i-1].y)==0)&&((listeRetenue[i-1].y-listeRetenue[i-2].y)==0))//cas où l'algo essaie de suivre la ligne droite entre depart et arrivé
+    { if(((listeRetenue[i+1].y-listeRetenue[i].y)!=0)&&((listeRetenue[i+2].y-listeRetenue[i+1].y)!=0))
       {
         Serial.println(listeRetenue[i].x);
         Serial.println(listeRetenue[i].y);
         Serial.println("coucou");
-        }
+        Serial.println("cas2");
+      }
     }
+    if(((listeRetenue[i].y-listeRetenue[i-1].y)==0))//
+    { if(((listeRetenue[i+1].y-listeRetenue[i].y)==0)&&((listeRetenue[i+3].y-listeRetenue[i+1].y)==0))
+      {
+        Serial.println(listeRetenue[i].x);
+        Serial.println(listeRetenue[i].y);
+        Serial.println("coucou");
+        Serial.println("cas3");
+      }
     }
-    Serial.println(listeRetenue[nbrnoeud].x);
-    Serial.println(listeRetenue[nbrnoeud].y);
-    Serial.println("coucou");
   }
+  Serial.println(listeRetenue[nbrnoeud].x);
+  Serial.println(listeRetenue[nbrnoeud].y);
+  Serial.println("coucou");
+}
