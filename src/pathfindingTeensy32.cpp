@@ -1,13 +1,10 @@
 #include <pathfindingTeensy32.h>
 
-
+/*
+Adaptation du code C pour l'implantation dans le simulateur python
+*/
 
 void setup() {
-  pinMode(13,OUTPUT);
-  digitalWrite(13,HIGH);
-  Serial.begin(9600);
-  delay(100);
-  Serial.println("com ok");
   int xpos=10;//position courante du robot
   int ypos=10;
   posrobot.x=xpos;
@@ -16,61 +13,46 @@ void setup() {
   objectif.y=ypos+24;
   initTable();
   posEnemi(xpos+22,ypos+15);
-  //posEnemi(xpos+50,ypos+15);
-
   table[posrobot.x][posrobot.y]=2;
   table[objectif.x][objectif.y]=3;
-  t1=millis();
   algoPAstar(table,objectif,posrobot);
-
-  ttot=millis()-t1;
-  Serial.println(ttot);
-  //delay(1500);
   affichetab();
   cheminRobot();
-  /*for(int i=0;i<150;i++){
-    Serial.println(listeRetenue[i].x,DEC);
-    Serial.println(listeRetenue[i].y);
-
-  }*/
-  //Serial.println(nbrnoeud);
-
-}
-
-void loop() {
-
-}
-
-void affichetab(){
-  //Serial.print("b");
-  for(int i=0;i<100;i++){
-    for(int j=0;j<150;j++){
-      Serial.print(table[j][i]);
-    }
-    Serial.println();
-  }
 }
 
 void initTable(){
   //definition des tassots sur la table2020 et initialise le tableau
 
-  for (int  i=93;i<100;i++){
-    table[45][i]=1;
-    table[46][i]=1;
+  for (int  i=480;i<520;i++){
+    table[230][i]=1;
+    table[231][i]=1;
+    table[232][i]=1;
+    table[233][i]=1;
+    table[234][i]=1;
+    table[235][i]=1;
   }
 
-  for (int   i=85;i<100;i++){
-    table[75][i]=1;
-    table[76][i]=1;
+  for (int   i=440;i<100;i++){
+    table[384][i]=1;
+    table[385][i]=1;
+    table[386][i]=1;
+    table[387][i]=1;
+    table[388][i]=1;
+    table[389][i]=1;
   }
 
-  for (int   i=93;i<100;i++){
-    table[105][i]=1;
-    table[106][i]=1;
+  for (int   i=480;i<100;i++){
+    table[540][i]=1;
+    table[541][i]=1;
+    table[542][i]=1;
+    table[543][i]=1;
+    table[544][i]=1;
+    table[545][i]=1;
+    table[546][i]=1;
   }
 }
 
-void algoPAstar(uint8_t table[150][100], noeud objectif, noeud depart){
+void algoPAstar(int table[778][520], noeud objectif, noeud depart){
   nbrnoeud++;
 
   int j;
@@ -86,7 +68,6 @@ void algoPAstar(uint8_t table[150][100], noeud objectif, noeud depart){
   if(-pente>1&&objectif.x<depart.x)dir=3; //cas ou l'objectif est en bas à gauche du robot
   if(-pente<1&&objectif.x>depart.x)dir=4; //cas ou l'objectif est bas à droite du robot
   if(-pente<1&&objectif.x<depart.x)dir=5; //cas ou l'objectif est en haut à gauche du robot
-
 
   choixdir(dir,objectif,depart);
   for(int i=0;i<3;i++){
@@ -170,7 +151,7 @@ void triliste(noeud liste[3]){
   }
 }
 
-void choixdir(uint8_t dir,noeud objectif, noeud depart2){
+void choixdir(int dir,noeud objectif, noeud depart2){
 
   pente = ((float)(objectif.y-posrobot.y) /(float) (objectif.x-posrobot.x));
   b=objectif.y-pente*objectif.x;
@@ -244,7 +225,7 @@ void choixdir(uint8_t dir,noeud objectif, noeud depart2){
     triliste(listeAttente);
     break;
     case 4:
-    //Serial.println("coucou");
+    //.printf("coucou");
     n1.x=depart2.x;
     n1.y=depart2.y+1;
     n1.h=(abs(n1.y-pente*n1.x-b)/sqrt(1-pente*pente));
@@ -313,23 +294,23 @@ void choixdir(uint8_t dir,noeud objectif, noeud depart2){
 }
 
 void posEnemi(int posx,int posy){
-for(int i = posx-10;i<posx+11;i++){
-  table[i][posy-10]=6;
-}
-for(int i = posx-10;i<posx+11;i++){
-  table[i][posy+10]=6;
-}
-for(int i = posy-10;i<posy+10;i++){
-  table[posx-10][i]=6;
-}
-for(int i = posy-10;i<posy+10;i++){
-  table[posx+10][i]=6;
-}
+  for(int i = posx-50;i<posx+51;i++){
+    table[i][posy-50]=6;
+  }
+  for(int i = posx-50;i<posx+51;i++){
+    table[i][posy+50]=6;
+  }
+  for(int i = posy-50;i<posy+50;i++){
+    table[posx-50][i]=6;
+  }
+  for(int i = posy-50;i<posy+50;i++){
+    table[posx+50][i]=6;
+  }
 
-//deuxieme couche
+  //deuxieme couche
 
-/*for(int i = posx-9;i<posx+10;i++){
-table[i][posy-8]=6;
+  /*for(int i = posx-9;i<posx+10;i++){
+  table[i][posy-8]=6;
 }
 for(int i = posx-9;i<posx+10;i++){
 table[i][posy+8]=6;
@@ -343,48 +324,48 @@ table[posx+8][i]=6;
 }
 
 void cheminRobot(){
-  Serial.println("chemin");
+
 
   for(int i=3;i<250;i++){
     if(listeRetenue[i].x==0)i=250;
     // pente1=((float)(&listeRetenue[i].y-&listeRetenue[i-1].y)/(float)(&listeRetenue[i].x-&listeRetenue[i-1].x));
     // pente2=((float)(&listeRetenue[i-2].y-&listeRetenue[i-3].y)/(float) (&listeRetenue[i-2].x-&listeRetenue[i-3].x));
     // pente3=((float)(&listeRetenue[i+1].y-&listeRetenue[i].y)/(float) (&listeRetenue[i+1].x-&listeRetenue[i].x));
-    if(((listeRetenue[i+1].x-listeRetenue[i].x)==0))//cas d'un changement à 90°
+    if(((listeRetenue[i+1].x-listeRetenue[i].x)==0)) //cas d'un changement à 90°
     {
       if(((listeRetenue[i].x-listeRetenue[i-1].x)!=0))
       {
-        Serial.println(listeRetenue[i].x);
-        Serial.println(listeRetenue[i].y);
-        Serial.println("cas0");
+        printf("CheminX %u \n",listeRetenue[i].x);
+        printf("CheminY %u \n",listeRetenue[i].y);
+        printf("cas0");
       }
     }
-    if(((listeRetenue[i-1].x-listeRetenue[i-2].x)==0))// passage de 90° vers pente non nulle ou non infini
+    if(((listeRetenue[i-1].x-listeRetenue[i-2].x)==0)) // passage de 90° vers pente non nulle ou non infini
     {
       if(((listeRetenue[i+1].y-listeRetenue[i].y)==0))
       {
-        Serial.println(listeRetenue[i].x);
-        Serial.println(listeRetenue[i].y);
-        Serial.println("cas1");
+        printf("CheminX %u \n", listeRetenue[i].x);
+        printf("CheminY %u \n", listeRetenue[i].y);
+        printf("cas1");
       }
     }
-    if(((listeRetenue[i].y-listeRetenue[i-1].y)==0)&&((listeRetenue[i-1].y-listeRetenue[i-2].y)==0))//cas où l'algo essaie de suivre la ligne droite entre depart et arrivé
+    if(((listeRetenue[i].y-listeRetenue[i-1].y)==0)&&((listeRetenue[i-1].y-listeRetenue[i-2].y)==0)) //cas où l'algo essaie de suivre la ligne droite entre depart et arrivé
     { if(((listeRetenue[i+1].y-listeRetenue[i].y)!=0)&&((listeRetenue[i+2].y-listeRetenue[i+1].y)!=0))
       {
-        Serial.println(listeRetenue[i].x);
-        Serial.println(listeRetenue[i].y);
-        Serial.println("cas2");
+        printf("CheminX %u \n", listeRetenue[i].x);
+        printf("CheminY %u \n", listeRetenue[i].y);
+        printf("cas2");
       }
     }
     if(((listeRetenue[i-2].y-listeRetenue[i-1].y)==0)&&((listeRetenue[i].y-listeRetenue[i-1].y)!=0))//
     { if((listeRetenue[i+5].y-listeRetenue[i].y)==0)
       {
-        Serial.println(listeRetenue[i].x);
-        Serial.println(listeRetenue[i].y);
-        Serial.println("cas3");
+        printf("CheminX %u \n", listeRetenue[i].x);
+        printf("CheminY %u \n", listeRetenue[i].y);
+        printf("cas3");
       }
     }
   }
-  Serial.println(listeRetenue[nbrnoeud].x);
-  Serial.println(listeRetenue[nbrnoeud].y);
+  printf("CheminX %u \n", listeRetenue[nbrnoeud].x);
+  printf("CheminY %u \n", listeRetenue[nbrnoeud].y);
 }

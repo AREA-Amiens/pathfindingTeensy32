@@ -1,14 +1,16 @@
-#include <Arduino.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
 
 typedef struct{
-  uint8_t x; //position x,y du noeud
-  uint8_t y;
+  int x; //position x,y du noeud
+  int y;
   float h; // heuristique
 }noeud;
 
-uint8_t table[150][100];
+int table[778][520];
 
-noeud listeRetenue[250]; //liste retenue de noeud
+noeud listeRetenue[500]; //liste retenue de noeud
 noeud listeAttente[3];
 noeud n1;
 noeud n2;
@@ -21,12 +23,12 @@ noeud noeudparent;
 
 float pente;
 float b;
-uint8_t dir;
-uint8_t noeudfaux=0;
-uint8_t nbrnoeud;
+int dir;
+int noeudfaux=0;
+int nbrnoeud;
 
-uint8_t xcourant;
-uint8_t ycourant;
+int xcourant;
+int ycourant;
 
 float t1;
 float ttot;
@@ -35,8 +37,8 @@ float pente2;
 float pente3;
 
 void triliste(noeud liste[3]);
-void choixdir(uint8_t dir,noeud objectif,noeud depart);
-void algoPAstar(uint8_t table1[150][100],noeud objectif,noeud depart);
+void choixdir(int dir,noeud objectif,noeud depart);
+void algoPAstar(int table1[778][520],noeud objectif,noeud depart);
 void initTable();
 void affichetab();
 void posEnemi(int posx,int posy);
