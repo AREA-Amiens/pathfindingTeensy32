@@ -6,13 +6,6 @@ typedef struct{
   float h; // heuristique
 }noeud;
 
-void triliste(noeud liste[3]);
-void choixdir(uint8_t dir,noeud objectif,noeud depart);
-void algoPAstar(uint8_t table[150][100],noeud objectif,noeud depart);
-void initTable();
-void affichetab();
-void posEnemi(int posx,int posy);
-void cheminRobot(/*noeud liste[150]*/);
 uint8_t table[150][100];
 
 noeud listeRetenue[250]; //liste retenue de noeud
@@ -40,3 +33,11 @@ float ttot;
 float pente1;
 float pente2;
 float pente3;
+
+void triliste(noeud liste[3]);
+void choixdir(uint8_t dir,noeud objectif,noeud depart);
+void algoPAstar(uint8_t table1[150][100],noeud objectif,noeud depart);
+void initTable();
+void affichetab();
+void posEnemi(int posx,int posy);
+void cheminRobot(/*noeud liste[150]*/);

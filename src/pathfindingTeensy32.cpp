@@ -77,12 +77,7 @@ void algoPAstar(uint8_t table[150][100], noeud objectif, noeud depart){
   noeudfaux=0;
 
   pente = ((float)(objectif.y-depart.y) /(float) (objectif.x-depart.x))*10.0;
-  /*Serial.println(pente);
-  Serial.println();
-  Serial.println(objectif.x);
-  Serial.println(objectif.y);
-  Serial.println(depart.x);
-  Serial.println(depart.y);*/
+
   if((pente==0.0&&objectif.x>depart.x)||(pente>=-1.0&&pente<=1.0&&objectif.x>depart.x))dir=6; // pile a droite
   if((pente==0.0&&objectif.x<depart.x)||(pente>=-1.0&&pente<=1.0&&objectif.x<depart.x))dir=7; //pile a gauche
   if(pente>1000&&objectif.y<depart.y)dir=0; //cas ou l'objectif est au dessus du robot dans l'axe des y (pente infini)
@@ -93,13 +88,9 @@ void algoPAstar(uint8_t table[150][100], noeud objectif, noeud depart){
   if(-pente<1&&objectif.x<depart.x)dir=5; //cas ou l'objectif est en haut à gauche du robot
 
 
-  //Serial.println(dir);
   choixdir(dir,objectif,depart);
   for(int i=0;i<3;i++){
     if((table[listeAttente[i].x][listeAttente[i].y]==1)||(table[listeAttente[i].x][listeAttente[i].y]==6)){
-      //Serial.println("boum");
-      //Serial.println(listeAttente[i].x);
-
       noeudfaux++;
     }
   }
@@ -158,27 +149,13 @@ void algoPAstar(uint8_t table[150][100], noeud objectif, noeud depart){
     break;
   }
 
-
   table[listeRetenue[nbrnoeud].x][listeRetenue[nbrnoeud].y]=4;
 
-
-
-
   if((listeRetenue[nbrnoeud].x!=objectif.x)||(listeRetenue[nbrnoeud].y!=objectif.y)){
-    /*Serial.println(listeRetenue[nbrnoeud].x);
-    Serial.println(listeRetenue[nbrnoeud].y);
-    Serial.println(objectif.x);
-    Serial.println(objectif.y);
-    */
-    algoPAstar(table,objectif,listeRetenue[nbrnoeud]);
-    //Serial.println(nbrnoeud);
 
+    algoPAstar(table,objectif,listeRetenue[nbrnoeud]);
 
   }
-//Serial.println(nbrnoeud);
-
-
-
 
 }
 
@@ -194,8 +171,7 @@ void triliste(noeud liste[3]){
 }
 
 void choixdir(uint8_t dir,noeud objectif, noeud depart2){
-  //Serial.println(dir);
-  //Serial.println();
+
   pente = ((float)(objectif.y-posrobot.y) /(float) (objectif.x-posrobot.x));
   b=objectif.y-pente*objectif.x;
   switch (dir) {
@@ -380,7 +356,6 @@ void cheminRobot(){
       {
         Serial.println(listeRetenue[i].x);
         Serial.println(listeRetenue[i].y);
-        Serial.println("coucou");
         Serial.println("cas0");
       }
     }
@@ -390,7 +365,6 @@ void cheminRobot(){
       {
         Serial.println(listeRetenue[i].x);
         Serial.println(listeRetenue[i].y);
-        Serial.println("coucou");
         Serial.println("cas1");
       }
     }
@@ -399,21 +373,18 @@ void cheminRobot(){
       {
         Serial.println(listeRetenue[i].x);
         Serial.println(listeRetenue[i].y);
-        Serial.println("coucou");
         Serial.println("cas2");
       }
     }
-    if(((listeRetenue[i].y-listeRetenue[i-1].y)==0))//
-    { if(((listeRetenue[i+1].y-listeRetenue[i].y)==0)&&((listeRetenue[i+3].y-listeRetenue[i+1].y)==0))
+    if(((listeRetenue[i-2].y-listeRetenue[i-1].y)==0)&&((listeRetenue[i].y-listeRetenue[i-1].y)!=0))//
+    { if((listeRetenue[i+5].y-listeRetenue[i].y)==0)
       {
         Serial.println(listeRetenue[i].x);
         Serial.println(listeRetenue[i].y);
-        Serial.println("coucou");
         Serial.println("cas3");
       }
     }
   }
   Serial.println(listeRetenue[nbrnoeud].x);
   Serial.println(listeRetenue[nbrnoeud].y);
-  Serial.println("coucou");
 }
